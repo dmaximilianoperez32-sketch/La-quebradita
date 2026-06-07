@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- TÍTULO DE LA PÁGINA -->
+    <title>La Quebradita Amoblamientos</title>
+    
+    <!-- 📱 ETIQUETAS META PARA COMPARTIR EN WHATSAPP E INSTAGRAM (OPEN GRAPH) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="La Quebradita Amoblamientos · Encuesta de Remodelación">
+    <meta property="og:description" content="Diseño exclusivo y amoblamientos a medida. Completá la encuesta y cotizá tu próximo proyecto de forma online.">
+    <!-- RECOMENDACIÓN: Reemplazá este enlace por una foto real de tu logo o de un mueble tuyo (Medida ideal: 1200x630px) -->
+    <meta property="og:image" content="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600&auto=format&fit=crop">
+    <meta property="og:site_name" content="La Quebradita">
+
+    <!-- Fuente moderna para diseño de interiores -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff7b00;
+            --primary-hover: #e06c00;
+            --dark: #22252a;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #495057;
+            --border: #e9ecef;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body { 
+            background: var(--bg); 
+            color: var(--dark);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent; /* Mejora clicks en celulares */
+        }
+
+        .header { 
+            background: linear-gradient(135deg, var(--dark) 0%, #343a40 100%);
+            color: white; 
+            padding: 50px 20px 80px 20px; 
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .container { 
+            max-width: 1200px; 
+            margin: -50px auto 40px auto; 
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 900px) {
+            .container {
+                grid-template-columns: 1.2fr 0.8fr;
+            }
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        @media (min-width: 600px) {
+            .card { padding: 40px; }
+        }
+
+        h2 { 
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px; 
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label { 
+            display: block; 
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        input, select { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 2px solid var(--border); 
+            border-radius: 10px;
+            background: #fff;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            -webkit-appearance: none; /* Quita estilos nativos raros en iOS */
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(255, 123, 0, 0.15);
+        }
+
+        /* Flecha personalizada para los select en móviles debido al -webkit-appearance */
+        select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        button { 
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 10px; 
+            background: var(--primary); 
+            color: white; 
+            font-size: 1rem; 
+            font-weight: 600;
+            cursor: pointer; 
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 123, 0, 0.2);
+        }
+
+        button:hover { 
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success { 
+            margin-top: 20px; 
+            color: #2b9348; 
+            font-weight: 600;
+            text-align: center;
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .footer { 
+            text-align: center; 
+            padding: 40px 20px; 
+            color: #868e96;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>La Quebradita Amoblamientos</h1>
+    <p>Diseño exclusivo y amoblamientos a medida · Presupuestos</p>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2>Encuesta de Remodelación</h2>
+
+        <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" id="nombre" placeholder="Ej: Juan Pérez">
+        </div>
+
+        <div class="form-group">
+            <label>Teléfono de contacto</label>
+            <input type="tel" id="telefono" placeholder="Ej: 11 2345 6789">
+        </div>
+
+        <div class="form-group">
+            <label>¿Qué amoblamiento te gustaría remodelar?</label>
+            <select id="amoblamiento">
+                <option>Cocina</option>
+                <option>Placard</option>
+                <option>Vestidor</option>
+                <option>Mueble TV</option>
+                <option>Baño</option>
+                <option>Oficina</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>¿Qué ambiente deseas renovar?</label>
+            <select id="ambiente">
+                <option>Cocina</option>
+                <option>Dormitorio</option>
+                <option>Living</option>
+                <option>Baño</option>
+                <option>Oficina</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Presupuesto estimado</label>
+            <select id="presupuesto">
+                <option>Menos de $1.000.000</option>
+                <option>$1.000.000 a $2.000.000</option>
+                <option>$2.000.000 a $4.000.000</option>
+                <option>Más de $4.000.000</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Estilo preferido</label>
+            <select id="estilo">
+                <option>Moderno</option>
+                <option>Minimalista</option>
+                <option>Industrial</option>
+                <option>Nórdico</option>
+                <option>Clásico</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>¿Cuándo te gustaría realizar el trabajo?</label>
+            <select id="plazo">
+                <option>Inmediatamente</option>
+                <option>30 días</option>
+                <option>3 meses</option>
+                <option>Más adelante</option>
+            </select>
+        </div>
+
+        <button id="btnEnviar" onclick="enviarFormulario()">Enviar Encuesta</button>
+        <div id="mensaje" class="success"></div>
+    </div>
+
+    <div class="card" style="align-self: start;">
+        <h2>Demandas Actuales</h2>
+        <p style="font-size: 0.85rem; color: #868e96; margin-bottom: 15px;">Tendencias de amoblamientos solicitados en tiempo real por nuestros clientes.</p>
+        <canvas id="grafico"></canvas>
+    </div>
+</div>
+
+<div class="footer">
+    &copy; 2026 La Quebradita · Arquitectura, Diseño y Amoblamientos a Medida
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQkhVcQFrSX4OJ9--6TcI2sNl22Rskp8Ea72JaFkJLh3dtacD0_kKwqZ_NcwWNtP9G/exec"; 
+let grafico;
+
+async function cargarDatos() {
+    try {
+        const respuesta = await fetch(SCRIPT_URL + "?accion=estadisticas");
+        const datos = await respuesta.json();
+        actualizarGrafico(datos);
+    } catch (error) {
+        console.log("Error al cargar datos del gráfico:", error);
+    }
+}
+
+function actualizarGrafico(datos) {
+    const etiquetas = Object.keys(datos);
+    const valores = Object.values(datos);
+
+    if (grafico) {
+        grafico.destroy();
+    }
+
+    grafico = new Chart(
+        document.getElementById("grafico"),
+        {
+            type: "bar",
+            data: {
+                labels: etiquetas,
+                datasets: [{
+                    label: "Solicitudes",
+                    data: valores,
+                    backgroundColor: "rgba(255, 123, 0, 0.15)", 
+                    borderColor: "rgba(255, 123, 0, 1)",
+                    borderWidth: 2,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { beginAtZero: true, ticks: { stepSize: 1, color: '#868e96' } }
+                }
+            }
+        }
+    );
+}
+
+// MÉTODO JSONP OPTIMIZADO PARA EVITAR ERRORES EN WEBVIEWS (IG / WHATSAPP)
+function enviarFormulario() {
+    const btn = document.getElementById("btnEnviar");
+    const msgDiv = document.getElementById("mensaje");
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+        
+    if (!nombre || !telefono) {
+        alert("Por favor, ingresá tu nombre y teléfono de contacto.");
+        return;
+    }
+
+    btn.disabled = true;
+    msgDiv.style.display = "block";
+    msgDiv.style.background = "#fff3cd";
+    msgDiv.style.color = "#856404";
+    msgDiv.innerHTML = "Procesando tu solicitud...";
+
+    const amoblamiento = document.getElementById("amoblamiento").value;
+    const ambiente = document.getElementById("ambiente").value;
+    const presupuesto = document.getElementById("presupuesto").value;
+    const estilo = document.getElementById("estilo").value;
+    const plazo = document.getElementById("plazo").value;
+
+    // Elimina scripts JSONP viejos para no saturar la memoria del celular
+    const scriptId = "jsonp_google_script";
+    const antiguoScript = document.getElementById(scriptId);
+    if (antiguoScript) antiguoScript.remove(); 
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = `${SCRIPT_URL}?callback=respuestaGoogle&nombre=${encodeURIComponent(nombre)}&telefono=${encodeURIComponent(telefono)}&amoblamiento=${encodeURIComponent(amoblamiento)}&ambiente=${encodeURIComponent(ambiente)}&presupuesto=${encodeURIComponent(presupuesto)}&estilo=${encodeURIComponent(estilo)}&plazo=${encodeURIComponent(plazo)}`;
+        
+    document.body.appendChild(script);
+}
+
+function respuestaGoogle(resultado) {
+    const btn = document.getElementById("btnEnviar");
+    const msgDiv = document.getElementById("mensaje");
+
+    btn.disabled = false;
+
+    const script = document.getElementById("jsonp_google_script");
+    if (script) script.remove();
+
+    if (resultado.status === "success") {
+        msgDiv.style.background = "#e8f5e9";
+        msgDiv.style.color = "#2b9348";
+        msgDiv.innerHTML = "¡Muchas gracias! Tu respuesta fue registrada.";
+                
+        document.getElementById("nombre").value = "";
+        document.getElementById("telefono").value = "";
+
+        setTimeout(cargarDatos, 1000);
+    } else {
+        msgDiv.style.background = "#f8d7da";
+        msgDiv.style.color = "#721c24";
+        msgDiv.innerHTML = "Hubo un error al guardar. Intentá nuevamente.";
+    }
+}
+
+cargarDatos();
+// Se actualiza el gráfico cada 3 minutos en segundo plano para ahorrar recursos
+setInterval(cargarDatos, 180000); 
+</script>
+</body>
+</html>
