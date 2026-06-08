@@ -13,7 +13,6 @@
     <title>La Quebradita Amoblamientos</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -206,9 +205,9 @@
                 <label for="ambiente">¿Cómo definirías el estado actual de tu ambiente?</label>
                 <select id="ambiente" name="ambiente" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
-                    <option value="En obra gris / Construcción">Obra en construccion </option>
-                    <option value="Listo para colocar el mueble">Obra Terminada (Listo para colocar el mueble)</option>
-                    <option value="Remodelación (Hay que retirar un mueble viejo)">Remodelación </option>
+                    <option value="En obra gris / Construcción">En obra gris / Construcción</option>
+                    <option value="Listo para colocar el mueble">Terminado (Listo para colocar el mueble)</option>
+                    <option value="Remodelación (Hay que retirar un mueble viejo)">Remodelación (Hay que retirar un mueble viejo)</option>
                 </select>
             </div>
 
@@ -218,19 +217,19 @@
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="Económico / Funcional">Económico / Busco lo más funcional</option>
                     <option value="Estándar / Buena calidad">Estándar / Busco equilibrio precio-calidad</option>
-                    <option value="Premium / Materiales exclusivos">Premium / Busco materiales y herrajes Tope de gama </option>
+                    <option value="Premium / Materiales exclusivos">Premium / Busco materiales y herrajes top</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="estilo">Estilo preferido</label>
+                <label for="estilo">¿Qué terminación o estilo visual preferís?</label>
                 <select id="estilo" name="estilo" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
-                    <option value="Blanco Clásico">Moderno</option>
-                    <option value="Amaderado Naturaleza">Minimalista</option>
-                    <option value="Moderno Oscuro">Industrial</option>
-                    <option value="Combinado">Nórdico</option>
-                    <option value="Clásico">Clásico </option>
+                    <option value="Moderno">Moderno (Líneas limpias y colores actuales)</option>
+                    <option value="Minimalista">Minimalista (Sencillo, funcional y despejado)</option>
+                    <option value="Industrial">Industrial (Combinación de madera, metal o tonos oscuros)</option>
+                    <option value="Nórdico">Nórdico (Maderas claras, tonos blancos y calidez)</option>
+                    <option value="Clásico">Clásico (Elegante, tradicional y atemporal)</option>
                 </select>
             </div>
 
@@ -249,7 +248,7 @@
 
         <div id="successMessage" class="success-box hidden">
             <h2>¡Solicitud Recibida con Éxito!</h2>
-            <p>Gracias por completar los datos del proyecto. Ya registramos tus preferencias sobre el tipo de amoblamiento, materiales y plazos. Nos vamos a comunicar con vos por WhatsApp para coordinar el diseño técnico o el render realista.</p>
+            <p>Gracias por completar los datos del proyecto. Ya registramos tus preferencias. Nos vamos a comunicar con vos por WhatsApp para coordinar el diseño técnico o el render realista.</p>
         </div>
     </div>
 
@@ -269,7 +268,6 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "Procesando tu solicitud...";
 
-            // Armamos la lista ordenada de datos del cliente
             const formData = {
                 Nombre: document.getElementById('nombre').value,
                 Telefono: document.getElementById('telefono').value,
@@ -281,7 +279,6 @@
                 "_subject": "Nuevo Presupuesto de Amoblamiento - La Quebradita"
             };
 
-            // Enviamos por POST en formato JSON limpio
             fetch(FORM_ACTION_URL, {
                 method: "POST",
                 headers: { 
@@ -290,14 +287,18 @@
                 },
                 body: JSON.stringify(formData)
             })
-            .then(response => response.json())
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                throw new Error('Error en el servidor');
+            })
             .then(data => {
-                // Ocultamos formulario y habilitamos caja de éxito al instante
                 document.getElementById('surveyForm').classList.add('hidden');
                 document.getElementById('successMessage').classList.remove('hidden');
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error detallado:', error);
                 alert("Hubo un inconveniente temporal. Por favor, intentá nuevamente.");
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Enviar Solicitud de Cotización";
