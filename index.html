@@ -111,6 +111,34 @@
             transform: translateY(-2px);
         }
 
+        .btn-submit:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .success-box {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .success-box h2 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .success-box p {
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
         /* 🟢 BOTÓN FLOTANTE DE WHATSAPP */
         .whatsapp-float {
             position: fixed;
@@ -149,25 +177,20 @@
             <p>Diseño de Amoblamientos & Proyectos a Medida</p>
         </div>
 
-        <form action="https://formsubmit.co/dmaximilianoperez32@gmail.com" method="POST">
-            
-           <input type="hidden" name="_next" value="https://dmaximilianoperez32-sketch.github.io/La-Quebradita/">
-            <input type="hidden" name="_subject" value="Nuevo Presupuesto de Amoblamiento - La Quebradita">
-            <input type="hidden" name="_template" value="table">
-
+        <form id="surveyForm">
             <div class="form-group">
                 <label for="nombre">Nombre y Apellido</label>
-                <input type="text" id="nombre" name="Nombre" placeholder="Ej: Juan Pérez" required>
+                <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
             </div>
 
             <div class="form-group">
                 <label for="telefono">Teléfono de Contacto (WhatsApp)</label>
-                <input type="tel" id="telefono" name="Telefono" placeholder="Ej: 3815555555" required>
+                <input type="tel" id="telefono" required placeholder="Ej: 3815555555">
             </div>
 
             <div class="form-group">
                 <label for="amoblamiento">¿Qué tipo de amoblamiento estás buscando?</label>
-                <select id="amoblamiento" name="Amoblamiento" required>
+                <select id="amoblamiento" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="Cocina Completa">Cocina Completa</option>
                     <option value="Bajo Mesada / Alacena">Bajo Mesada / Alacena</option>
@@ -180,7 +203,7 @@
 
             <div class="form-group">
                 <label for="ambiente">¿Cómo definirías el estado actual de tu ambiente?</label>
-                <select id="ambiente" name="Ambiente" required>
+                <select id="ambiente" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="En obra gris / Construcción">En obra gris / Construcción</option>
                     <option value="Listo para colocar el mueble">Terminado (Listo para colocar el mueble)</option>
@@ -190,7 +213,7 @@
 
             <div class="form-group">
                 <label for="presupuesto">¿Tenés un presupuesto estimado asignado al proyecto?</label>
-                <select id="presupuesto" name="Presupuesto" required>
+                <select id="presupuesto" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="Económico / Funcional">Económico / Busco lo más funcional</option>
                     <option value="Estándar / Buena calidad">Estándar / Busco equilibrio precio-calidad</option>
@@ -200,7 +223,7 @@
 
             <div class="form-group">
                 <label for="estilo">¿Qué terminación o estilo visual preferís?</label>
-                <select id="estilo" name="Estilo" required>
+                <select id="estilo" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="Moderno">Moderno (Líneas limpias y colores actuales)</option>
                     <option value="Minimalista">Minimalista (Sencillo, funcional y despejado)</option>
@@ -212,7 +235,7 @@
 
             <div class="form-group">
                 <label for="plazo">¿Para cuándo estimás realizar la instalación?</label>
-                <select id="plazo" name="Plazo" required>
+                <select id="plazo" required>
                     <option value="" disabled selected>Seleccioná una opción...</option>
                     <option value="Lo antes posible">Lo antes posible (Menos de 15 días)</option>
                     <option value="Próximo mes">Dentro del próximo mes</option>
@@ -220,8 +243,13 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn-submit">Enviar Solicitud de Cotización</button>
+            <button type="submit" id="submitBtn" class="btn-submit">Enviar Solicitud de Cotización</button>
         </form>
+
+        <div id="successMessage" class="success-box hidden">
+            <h2>¡Solicitud Recibida con Éxito!</h2>
+            <p>Gracias por completar los datos de tu proyecto. Ya registramos tus preferencias de diseño. Nos vamos a comunicar con vos por WhatsApp para coordinar los detalles técnicos o armar tu render realista.</p>
+        </div>
     </div>
 
     <a href="https://wa.me/543815814062" class="whatsapp-float" target="_blank" title="Contactar por WhatsApp">
@@ -230,5 +258,56 @@
         </svg>
     </a>
 
+    <script>
+        const FORM_ACTION_URL = "https://formsubmit.co/ajax/dmaximilianoperez32@gmail.com";
+
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Procesando tu solicitud...";
+
+            // Recolectamos las respuestas
+            const formData = {
+                Nombre: document.getElementById('nombre').value,
+                Telefono: document.getElementById('telefono').value,
+                Amoblamiento: document.getElementById('amoblamiento').value,
+                Ambiente: document.getElementById('ambiente').value,
+                Presupuesto: document.getElementById('presupuesto').value,
+                Estilo: document.getElementById('estilo').value,
+                Plazo: document.getElementById('plazo').value,
+                "_subject": "Nuevo Presupuesto de Amoblamiento - La Quebradita",
+                "_captcha": "false" // Apagamos el robot molesto para siempre
+            };
+
+            // Enviamos los datos como un proceso oculto (AJAX)
+            fetch(FORM_ACTION_URL, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Ocultamos el formulario y mostramos el cartel de éxito verde al instante
+                    document.getElementById('surveyForm').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                } else {
+                    alert("Hubo un problema con el servidor de envíos. Por favor, intentá de nuevo.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Enviar Solicitud de Cotización";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Ocurrió un error en la conexión. Por favor, intentá nuevamente.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Enviar Solicitud de Cotización";
+            });
+        });
+    </script>
 </body>
 </html>
